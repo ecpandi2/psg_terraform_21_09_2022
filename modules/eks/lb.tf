@@ -109,7 +109,7 @@ resource "kubernetes_ingress_class_v1" "ingress_class_default" {
 
 # Terraform Kubernetes Provider
 provider "kubernetes" {
-  host = data.terraform_remote_state.eks.outputs.cluster_endpoint 
+  host                   = element(concat(aws_eks_cluster.tfs-eks.*.endpoint, tolist([""])), 0)
   cluster_ca_certificate = base64decode(element(concat(aws_eks_cluster.tfs-eks[*].certificate_authority[0].data, tolist([""])), 0))
   token = data.aws_eks_cluster_auth.cluster.token
 }
