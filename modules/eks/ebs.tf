@@ -1,6 +1,6 @@
- locals {
-   name = "ebs"
- }
+#  locals {
+#    name = "ebs"
+#  }
 resource "aws_iam_policy" "ebs_csi_iam_policy" {
   name        = "${local.name}-AmazonEKS_EBS_CSI_Driver_Policy"
   path        = "/"
