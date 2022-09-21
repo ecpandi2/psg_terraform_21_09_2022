@@ -1,11 +1,11 @@
 # Terraform backend reference.
 terraform {
   backend "s3" {
-    bucket         = "psg-tf-dev-terraform-states-eks"
+    bucket         = "psg-tf-dev-terraform-states-eks-pandiyan"
     key            = "eks/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "psg-tf-dev-terraform-backend-locks-eks"
+    dynamodb_table = "psg-tf-dev-terraform-backend-locks-eks-pandiyan"
     profile        = "default"
   }
 }

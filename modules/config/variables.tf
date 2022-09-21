@@ -2,7 +2,7 @@ variable "vpc_cidr_map" {
   type = map(string)
 
   default = {
-    dev = "10.122.215.0/24"
+    dev = "10.0.0.0/16"
     #tst = "10.122.149.0/24"
     ## dem = "10.122.150.0/24"
     #  stg = "10.122.154.0/23"
@@ -14,7 +14,7 @@ variable "vpc_cidr_map" {
 variable "vpc_id_map" {
   type = map(string)
   default = {
-    dev = "vpc-07df74519eca7fd08" // Dev VPC: vpc-psg-psd-horizon-dev-2_euw1
+    dev = "vpc-0b36d67d943a161e8" // Dev VPC: vpc-psg-psd-horizon-dev-2_euw1
     # tst = "vpc-09d9d8f225d00fd2c"
     # dem = "vpc-04c7935a147abe1f1"
     # stg = "vpc-079fc505af96f609b"
@@ -51,7 +51,7 @@ variable "public_subnets_map" {
   type = map(list(string))
 
   default = {
-    dev = ["subnet-0d0afb8e3336d0ffb", "subnet-00501e32a63a4d1f8"]
+    dev = ["subnet-05ebba782aafd8c37", "subnet-07b442a4abf7d3d0a", "subnet-0bd92a7492cdc3556"]
     # tst = ["subnet-034a21c0e1ba3333d", "subnet-05d343c077166576d", "subnet-07e12869dcb7337a6"]
     # stg = ["subnet-050552df4a10b6cc2", "subnet-04b905afda4bc52c0", "subnet-098d0359d145a2b61"]
     # dem = ["subnet-0be7343d976b8214d", "subnet-0e48b317c06ffbd3d", "subnet-0ed521cb0a07d621b"]
@@ -64,7 +64,7 @@ variable "private_subnets_map" {
   type = map(list(string))
 
   default = {
-    dev = ["subnet-0733101ba3fe93b70","subnet-044a071254dc6b9f4"]
+    dev = ["subnet-0bcb8dfe6631ebbef","subnet-0c0bbae80ecef588d","subnet-09de066809892fdb3"]
     # tst = ["subnet-05539590bc2d5ec27", "subnet-040e49c11eca8d1f7", "subnet-0e7725bd8c00af84b"]
     # stg = ["subnet-08e9c0a61d9e626a9", "subnet-0ba060fd0dea1c24c", "subnet-0e05f7e059256b459"]
     # dem = ["subnet-0685fc3892160c47b", "subnet-0aeaccd8aa14f7c19", "subnet-0e3d91e0ccacd56bb"]
@@ -77,7 +77,7 @@ variable "public_private_map" {
   type = map(list(string))
 
   default = {
-    dev = ["subnet-0d0afb8e3336d0ffb", "subnet-00501e32a63a4d1f8","subnet-0733101ba3fe93b70","subnet-044a071254dc6b9f4"]
+    dev = ["subnet-05ebba782aafd8c37", "subnet-07b442a4abf7d3d0a", "subnet-0bd92a7492cdc3556","subnet-0bcb8dfe6631ebbef", "subnet-0c0bbae80ecef588d","subnet-09de066809892fdb3" ]
     #   tst = ["subnet-034a21c0e1ba3333d", "subnet-05d343c077166576d", "subnet-07e12869dcb7337a6"]
     #   stg = ["subnet-050552df4a10b6cc2", "subnet-04b905afda4bc52c0", "subnet-098d0359d145a2b61"]
     #   dem = ["subnet-0be7343d976b8214d", "subnet-0e48b317c06ffbd3d", "subnet-0ed521cb0a07d621b"]
@@ -102,7 +102,7 @@ variable "eks_nodegroup_instance_types" {
   type = map(list(string))
 
   default = {
-    dev = ["t3.large"]
+    dev = ["t3.medium"]
     # tst = ["t3.large"]
     # stg = ["t3.large"]
     # dem = ["t3.large"]
@@ -114,7 +114,7 @@ variable "eks_nodegroup_desired_size" {
   type = map(number)
 
   default = {
-    dev = 1
+    dev = 2
     # tst = 4
     # stg = 4
     # dem = 4
@@ -126,7 +126,7 @@ variable "eks_nodegroup_min_size" {
   type = map(number)
 
   default = {
-    dev = 1
+    dev = 2
     # tst = 4
     # stg = 4
     # dem = 4
@@ -138,7 +138,7 @@ variable "eks_nodegroup_max_size" {
   type = map(number)
 
   default = {
-    dev = 1
+    dev = 2
     # tst = 4
     # stg = 4
     # dem = 4
