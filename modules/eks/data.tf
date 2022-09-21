@@ -27,11 +27,11 @@ data "kubectl_file_documents" "cwagent_docs" {
 }
 
 # Resource: kubectl_manifest which will create k8s Resources from the URL specified in above datasource
-# resource "kubectl_manifest" "cwagent_serviceaccount" {
-#     depends_on = [kubernetes_namespace_v1.amazon_cloudwatch]
-#     for_each = data.kubectl_file_documents.cwagent_docs.manifests
-#     yaml_body = each.value
-# }
+resource "kubectl_manifest" "cwagent_serviceaccount" {
+    depends_on = [kubernetes_namespace_v1.amazon_cloudwatch]
+    for_each = data.kubectl_file_documents.cwagent_docs.manifests
+    yaml_body = each.value
+}
 
 # Resources: FluentBit 
 ## - ServiceAccount
