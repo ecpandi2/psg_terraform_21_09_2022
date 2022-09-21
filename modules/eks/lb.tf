@@ -107,6 +107,13 @@ resource "kubernetes_ingress_class_v1" "ingress_class_default" {
   }
 }
 
+# Terraform Kubernetes Provider
+provider "kubernetes" {
+  host = data.terraform_remote_state.eks.outputs.cluster_endpoint 
+  cluster_ca_certificate = base64decode(element(concat(aws_eks_cluster.tfs-eks[*].certificate_authority[0].data, tolist([""])), 0))
+  token = data.aws_eks_cluster_auth.cluster.token
+}
+
 ## Additional Note
 # 1. You can mark a particular IngressClass as the default for your cluster. 
 # 2. Setting the ingressclass.kubernetes.io/is-default-class annotation to true on an IngressClass resource will ensure that new Ingresses without an ingressClassName field specified will be assigned this default IngressClass.  
