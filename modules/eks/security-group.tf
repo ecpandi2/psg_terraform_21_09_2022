@@ -16,6 +16,13 @@ resource "aws_security_group" "eks-cluster-sg" {
     to_port     = 22
     cidr_blocks = tolist([var.vpc_cidr_block])
   }
+  ingress {
+    description = "http"
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = tolist([var.vpc_cidr_block])
+  }
   tags = {
     Name = "eks cluster ${var.aws_env}"
   }
