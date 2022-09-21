@@ -16,6 +16,7 @@ resource "kubernetes_ingress_v1" "ingress" {
       "alb.ingress.kubernetes.io/success-codes" = 200
       "alb.ingress.kubernetes.io/healthy-threshold-count" = 2
       "alb.ingress.kubernetes.io/unhealthy-threshold-count" = 2
+      "alb.ingress.kubernetes.io/subnets" = "subnet-05ebba782aafd8c37"
       #"alb.ingress.kubernetes.io/role/elb" = 1
       ## SSL Settings
       # Option-1: Using Terraform jsonencode Function
