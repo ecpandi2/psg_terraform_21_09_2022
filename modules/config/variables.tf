@@ -14,7 +14,7 @@ variable "vpc_cidr_map" {
 variable "vpc_id_map" {
   type = map(string)
   default = {
-    dev = "vpc-0b36d67d943a161e8" // Dev VPC: vpc-psg-psd-horizon-dev-2_euw1
+    dev = "vpc-00366a60373843085" // Dev VPC: vpc-psg-psd-horizon-dev-2_euw1
     # tst = "vpc-09d9d8f225d00fd2c"
     # dem = "vpc-04c7935a147abe1f1"
     # stg = "vpc-079fc505af96f609b"
@@ -51,7 +51,7 @@ variable "public_subnets_map" {
   type = map(list(string))
 
   default = {
-    dev = ["subnet-05ebba782aafd8c37", "subnet-07b442a4abf7d3d0a", "subnet-0bd92a7492cdc3556"]
+    dev = ["subnet-06a4350d76ab49f45", "subnet-0147c4062193710b3", "subnet-0fba59fa7f76bd46a"]
     # tst = ["subnet-034a21c0e1ba3333d", "subnet-05d343c077166576d", "subnet-07e12869dcb7337a6"]
     # stg = ["subnet-050552df4a10b6cc2", "subnet-04b905afda4bc52c0", "subnet-098d0359d145a2b61"]
     # dem = ["subnet-0be7343d976b8214d", "subnet-0e48b317c06ffbd3d", "subnet-0ed521cb0a07d621b"]
@@ -64,7 +64,7 @@ variable "private_subnets_map" {
   type = map(list(string))
 
   default = {
-    dev = ["subnet-0bcb8dfe6631ebbef","subnet-0c0bbae80ecef588d","subnet-09de066809892fdb3"]
+    dev = ["subnet-0097bb3e9d281d958","subnet-0a7a6fd81ff3a3a50","subnet-0ed1f329ac522104b"]
     # tst = ["subnet-05539590bc2d5ec27", "subnet-040e49c11eca8d1f7", "subnet-0e7725bd8c00af84b"]
     # stg = ["subnet-08e9c0a61d9e626a9", "subnet-0ba060fd0dea1c24c", "subnet-0e05f7e059256b459"]
     # dem = ["subnet-0685fc3892160c47b", "subnet-0aeaccd8aa14f7c19", "subnet-0e3d91e0ccacd56bb"]
@@ -77,7 +77,7 @@ variable "public_private_map" {
   type = map(list(string))
 
   default = {
-    dev = ["subnet-05ebba782aafd8c37", "subnet-07b442a4abf7d3d0a", "subnet-0bd92a7492cdc3556","subnet-0bcb8dfe6631ebbef", "subnet-0c0bbae80ecef588d","subnet-09de066809892fdb3" ]
+    dev = ["subnet-06a4350d76ab49f45", "subnet-0147c4062193710b3", "subnet-0fba59fa7f76bd46a","subnet-0097bb3e9d281d958","subnet-0a7a6fd81ff3a3a50","subnet-0ed1f329ac522104b" ]
     #   tst = ["subnet-034a21c0e1ba3333d", "subnet-05d343c077166576d", "subnet-07e12869dcb7337a6"]
     #   stg = ["subnet-050552df4a10b6cc2", "subnet-04b905afda4bc52c0", "subnet-098d0359d145a2b61"]
     #   dem = ["subnet-0be7343d976b8214d", "subnet-0e48b317c06ffbd3d", "subnet-0ed521cb0a07d621b"]
