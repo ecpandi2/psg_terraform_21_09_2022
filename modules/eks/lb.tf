@@ -226,7 +226,8 @@ resource "helm_release" "external_dns" {
     value = "sync"   # "sync" will ensure that when ingress resource is deleted, equivalent DNS record in Route53 will get deleted
   }    
         
-# }# Resource: IAM Policy for Cluster Autoscaler
+}
+# Resource: IAM Policy for Cluster Autoscaler
 # resource "aws_iam_policy" "cluster_autoscaler_iam_policy" {
 #   name        = "${local.name}-AmazonEKSClusterAutoscalerPolicy"
 #   path        = "/"
