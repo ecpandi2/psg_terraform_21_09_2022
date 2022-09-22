@@ -26,7 +26,7 @@ resource "kubernetes_ingress_v1" "ingress" {
       #"alb.ingress.kubernetes.io/certificate-arn" =  "${aws_acm_certificate.acm_cert.arn}"
       #"alb.ingress.kubernetes.io/ssl-policy" = "ELBSecurityPolicy-TLS-1-1-2017-01" #Optional (Picks default if not used)    
       # SSL Redirect Setting
-      "alb.ingress.kubernetes.io/ssl-redirect" = 443
+      #"alb.ingress.kubernetes.io/ssl-redirect" = 443
       # External DNS - For creating a Record Set in Route53
       #"external-dns.alpha.kubernetes.io/hostname" = "tfdnstest901.cmcloudlab542.info, tfdnstest902.cmcloudlab542.info"
     }    
