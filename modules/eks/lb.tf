@@ -93,138 +93,138 @@ resource "helm_release" "loadbalancer_controller" {
     
 }
 
-# # # Resource: Kubernetes Ingress Class
-# resource "kubernetes_ingress_class_v1" "ingress_class_default" {
-#   depends_on = [helm_release.loadbalancer_controller]
-#   metadata {
-#     name = "my-aws-ingress-class"
-#     annotations = {
-#       "ingressclass.kubernetes.io/is-default-class" = "true"
-#     }
-#   }  
-#   spec {
-#     controller = "ingress.k8s.aws/alb"
-#   }
-# }
+# # Resource: Kubernetes Ingress Class
+resource "kubernetes_ingress_class_v1" "ingress_class_default" {
+  depends_on = [helm_release.loadbalancer_controller]
+  metadata {
+    name = "my-aws-ingress-class"
+    annotations = {
+      "ingressclass.kubernetes.io/is-default-class" = "true"
+    }
+  }  
+  spec {
+    controller = "ingress.k8s.aws/alb"
+  }
+}
 
-# # Terraform Kubernetes Provider
-# provider "kubernetes" {
-#   host                   = element(concat(aws_eks_cluster.tfs-eks.*.endpoint, tolist([""])), 0)
-#   cluster_ca_certificate = base64decode(element(concat(aws_eks_cluster.tfs-eks[*].certificate_authority[0].data, tolist([""])), 0))
-#   token = data.aws_eks_cluster_auth.cluster.token
-# }
+# Terraform Kubernetes Provider
+provider "kubernetes" {
+  host                   = element(concat(aws_eks_cluster.tfs-eks.*.endpoint, tolist([""])), 0)
+  cluster_ca_certificate = base64decode(element(concat(aws_eks_cluster.tfs-eks[*].certificate_authority[0].data, tolist([""])), 0))
+  token = data.aws_eks_cluster_auth.cluster.token
+}
 
-# ## Additional Note
-# # 1. You can mark a particular IngressClass as the default for your cluster. 
-# # 2. Setting the ingressclass.kubernetes.io/is-default-class annotation to true on an IngressClass resource will ensure that new Ingresses without an ingressClassName field specified will be assigned this default IngressClass.  
-# # 3. Reference: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/ingress_class/
+## Additional Note
+# 1. You can mark a particular IngressClass as the default for your cluster. 
+# 2. Setting the ingressclass.kubernetes.io/is-default-class annotation to true on an IngressClass resource will ensure that new Ingresses without an ingressClassName field specified will be assigned this default IngressClass.  
+# 3. Reference: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/ingress_class/
 
-# # Resource: Create External DNS IAM Policy 
-# resource "aws_iam_policy" "externaldns_iam_policy" {
-#   name        = "AllowExternalDNSUpdates"
-#   path        = "/"
-#   description = "External DNS IAM Policy"
-#   policy = jsonencode({
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect": "Allow",
-#       "Action": [
-#         "route53:ChangeResourceRecordSets"
-#       ],
-#       "Resource": [
-#         "arn:aws:route53:::hostedzone/*"
-#       ]
-#     },
-#     {
-#       "Effect": "Allow",
-#       "Action": [
-#         "route53:ListHostedZones",
-#         "route53:ListResourceRecordSets"
-#       ],
-#       "Resource": [
-#         "*"
-#       ]
-#     }
-#   ]
-# })
-# }
+# Resource: Create External DNS IAM Policy 
+resource "aws_iam_policy" "externaldns_iam_policy" {
+  name        = "AllowExternalDNSUpdates"
+  path        = "/"
+  description = "External DNS IAM Policy"
+  policy = jsonencode({
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:ChangeResourceRecordSets"
+      ],
+      "Resource": [
+        "arn:aws:route53:::hostedzone/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:ListHostedZones",
+        "route53:ListResourceRecordSets"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+})
+}
 
-# # Resource: Create IAM Role 
-# resource "aws_iam_role" "externaldns_iam_role" {
-#   name = "${local.name}-externaldns-iam-role"
+# Resource: Create IAM Role 
+resource "aws_iam_role" "externaldns_iam_role" {
+  name = "${local.name}-externaldns-iam-role"
 
-#   # Terraform's "jsonencode" function converts a Terraform expression result to valid JSON syntax.
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Action = "sts:AssumeRoleWithWebIdentity"
-#         Effect = "Allow"
-#         Sid    = ""
-#         Principal = {
-#           Federated = var.enable_irsa ? concat(aws_iam_openid_connect_provider.default[*].arn, [""])[0] : null
-#         }
-#         Condition = {
-#           StringEquals = {
-#             "${local.aws_iam_oidc_connect_provider_extract_from_arn}:aud": "sts.amazonaws.com",            
-#             "${local.aws_iam_oidc_connect_provider_extract_from_arn}:sub": "system:serviceaccount:default:external-dns"
-#           }
-#         }        
-#       },
-#     ]
-#   })
+  # Terraform's "jsonencode" function converts a Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Federated = var.enable_irsa ? concat(aws_iam_openid_connect_provider.default[*].arn, [""])[0] : null
+        }
+        Condition = {
+          StringEquals = {
+            "${local.aws_iam_oidc_connect_provider_extract_from_arn}:aud": "sts.amazonaws.com",            
+            "${local.aws_iam_oidc_connect_provider_extract_from_arn}:sub": "system:serviceaccount:default:external-dns"
+          }
+        }        
+      },
+    ]
+  })
 
-#   tags = {
-#     tag-key = "AllowExternalDNSUpdates"
-#   }
-# }
+  tags = {
+    tag-key = "AllowExternalDNSUpdates"
+  }
+}
 
-# # Associate External DNS IAM Policy to IAM Role
-# resource "aws_iam_role_policy_attachment" "externaldns_iam_role_policy_attach" {
-#   policy_arn = aws_iam_policy.externaldns_iam_policy.arn 
-#   role       = aws_iam_role.externaldns_iam_role.name
-# }
+# Associate External DNS IAM Policy to IAM Role
+resource "aws_iam_role_policy_attachment" "externaldns_iam_role_policy_attach" {
+  policy_arn = aws_iam_policy.externaldns_iam_policy.arn 
+  role       = aws_iam_role.externaldns_iam_role.name
+}
 
-# # Resource: Helm Release 
-# resource "helm_release" "external_dns" {
-#   depends_on = [aws_iam_role.externaldns_iam_role]            
-#   name       = "external-dns"
+# Resource: Helm Release 
+resource "helm_release" "external_dns" {
+  depends_on = [aws_iam_role.externaldns_iam_role]            
+  name       = "external-dns"
 
-#   repository = "https://kubernetes-sigs.github.io/external-dns/"
-#   chart      = "external-dns"
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  chart      = "external-dns"
 
-#   namespace = "default"     
+  namespace = "default"     
 
-#   set {
-#     name = "image.repository"
-#     value = "k8s.gcr.io/external-dns/external-dns" 
-#   }       
+  set {
+    name = "image.repository"
+    value = "k8s.gcr.io/external-dns/external-dns" 
+  }       
 
-#   set {
-#     name  = "serviceAccount.create"
-#     value = "true"
-#   }
+  set {
+    name  = "serviceAccount.create"
+    value = "true"
+  }
 
-#   set {
-#     name  = "serviceAccount.name"
-#     value = "external-dns"
-#   }
+  set {
+    name  = "serviceAccount.name"
+    value = "external-dns"
+  }
 
-#   set {
-#     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-#     value = "${aws_iam_role.externaldns_iam_role.arn}"
-#   }
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = "${aws_iam_role.externaldns_iam_role.arn}"
+  }
 
-#   set {
-#     name  = "provider" # Default is aws (https://github.com/kubernetes-sigs/external-dns/tree/master/charts/external-dns)
-#     value = "aws"
-#   }    
+  set {
+    name  = "provider" # Default is aws (https://github.com/kubernetes-sigs/external-dns/tree/master/charts/external-dns)
+    value = "aws"
+  }    
 
-#   set {
-#     name  = "policy" # Default is "upsert-only" which means DNS records will not get deleted even equivalent Ingress resources are deleted (https://github.com/kubernetes-sigs/external-dns/tree/master/charts/external-dns)
-#     value = "sync"   # "sync" will ensure that when ingress resource is deleted, equivalent DNS record in Route53 will get deleted
-#   }    
+  set {
+    name  = "policy" # Default is "upsert-only" which means DNS records will not get deleted even equivalent Ingress resources are deleted (https://github.com/kubernetes-sigs/external-dns/tree/master/charts/external-dns)
+    value = "sync"   # "sync" will ensure that when ingress resource is deleted, equivalent DNS record in Route53 will get deleted
+  }    
         
 # }# Resource: IAM Policy for Cluster Autoscaler
 # resource "aws_iam_policy" "cluster_autoscaler_iam_policy" {
