@@ -16,6 +16,6 @@ provider "aws" {
 # Terraform Backend to be created. S3 creation and dynamodb table creation will be done through "remote" module.
 module "backend" {
   source                   = "../../../modules/remote" //local remote module
-  backend_bucket           = "psg-tf-dev-terraform-states-eks-pandiyan"
-  dynamodb_lock_table_name = "psg-tf-dev-terraform-backend-locks-eks-pandiyan"
+  backend_bucket           = "psg-tf-dev-terraform-states-eks-pandiyan1"
+  dynamodb_lock_table_name = "psg-tf-dev-terraform-backend-locks-eks-pandiyan1"
 }
